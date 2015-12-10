@@ -34,18 +34,16 @@ Filip ©taffa
 
 ---
 
-### Functional vs OOP
+### Functional vs OO
 
 * Functional languages call functions with arguments
-* OOP languages call methods on objects and these methods have arguments
+* OO languages call methods on objects and these methods have arguments
 
 ***
 
 ## Javascript
-
----
-
-### Duck typing
+* dynamic, weakly typed, OO
+* primary about ES 5
 
 ---
 
@@ -107,7 +105,11 @@ Filip ©taffa
 
 ---
 
-### Change existing code
+### Monkey patching
+
+---
+
+### Monkey patching example
 
 	[lang=js]
 	var original = Queue.prootype.enqueue;
@@ -120,16 +122,75 @@ Filip ©taffa
 
 ' even if we don't have sourcecode, potentially during runtime
 
+---
+
+
+### Monkey patching example
+
+* adding new behavior
+* changing current behavior
+	* testing
+	* AOP
+	...
+
+---
+
 
 ### Why did this happen?
 
 ---
 
-### Javascript argument handling
+### Duck typing
 
-* ignores missing or additional arguments
+When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.
 
 ---
+
+### Duck typing
+
+	[lang=js]
+	queue.enqueue(item);
+
+	priorityQueue.enqueue(item //missing argument);
+
+	Queue.prototype.enqueue = function(order, priority) {
+		var item = { priority: priority, item: order };
+		this.queue.push(item);
+		this.queue.sort(function(a, b) { return a.priority < b.priority; });
+	}
+
+---
+
+### Duck typing
+* good for brevity and testing
+* can lead to errors
+
+---
+
+### Javascript argument handling
+
+	[lang=js]
+	Queue.prototype.enqueue = function(order, priority) {
+		var item = { priority: priority, item: order };
+		this.queue.push(item);
+		this.queue.sort(function(a, b) { return a.priority < b.priority; });
+	}
+		
+	queue.enqueue(item) // priority undefined
+
+' also additional arguments not specified in method are ignored
+
+---
+
+### Unknown methods return undefined
+
+	[lang=js]
+	var o = {};
+	var a = o.doesNotExist; //undefined
+	o.func(); //undefined is not a function error
+
+---
+
 
 ### Implicit conversion
 
@@ -167,17 +228,55 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 
 ---
 
+### Types
+
+	[lang=js]
+	? function(?)
+
+	var a = ?;
+
+***
+
 ## Ruby
+* dynamic, strongly typed, OO
+* very magical
+
+---
+
+### Safer
+
+	[lang=ruby]
+	priorityQueue.enqueue(item); #throws
 
 ---
 
 ### Method missing
 
+	[lang=ruby]
+	class Person < ActiveRecord::Base
+	end
+
+	person = Person.find_by_email(123)
+	person.email
+
+---
+
+### Method missing
+
+* hook on object which handles unknown calls
 * available in ES 6 using proxies
+
+### Types
+
+	[lang=ruby]
+	? function(arg1, arg2, ...)
+
+	a = ?
 
 ***
 
-## OOP dynamic languages
+## OO dynamic languages
+
 
 
 ***
