@@ -250,6 +250,20 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 
 ---
 
+### Convention over configuration
+
+	[lang=ruby]
+	class OrderController < Controller
+		def add
+			...
+		end
+		def update
+			...
+		end
+	end
+
+---
+
 ### Method missing
 
 	[lang=ruby]
@@ -266,39 +280,113 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 * hook on object which handles unknown calls
 * available in ES 6 using proxies
 
+### Mixin
+* alternative to inheritance
+
+---
+
 ### Types
 
 	[lang=ruby]
-	? function(arg1, arg2, ...)
+	? function(arg1, arg2, ...) # runtime
 
 	a = ?
 
 ***
 
 ## OO dynamic languages
-
-
+* flexible
+* no compile time checking
+* few refactoring are safe
 
 ***
 
 ## Clojure
+* Lisp like language on JVM
+* dynamic, strongly typed, functional
+
+---
+
+### Calculating price of order
+OO language
+
+	[lang=rb]
+	price = order.calculate_price()
+
+***
+
+### Protocols
+
+---
+
+### Multimethods
+
+***
+
+## Erlang
+
+* more static than clojure, weakly typed, functional
+* compiled
+* 'let it crash'
+
+---
+
+### Static method definition
+
+---
+
+### Types
 
 ***
 
 ## Functional dynamic languages
 
----
-
-### Data are dynamic, function names and arity static
 
 ***
 
 ## Java
+* static, strongly typed, OO
 
+---
+
+	[lang=java]
+	public class PriorityQueue<T> {
+		public void enqueue(T item, int priority) {
+			array.add(item);
+			array.sort()
+		}
+
+	public T dequeue(
+	}
+
+---
+
+### Interfaces
+
+	[lang=java]
+	public interface PriorityQueue {
+	...
+	}
+
+	public class PriorityQueueImpl {
+	...
+	}
+
+---
+
+### Generics
+
+	[lang=java]
+	public class PriorityQueue {
+		public object dqeueue()
+	}
+
+	var order = (Order)priorityQueue.dequeue();
 
 ---
 
 ### Final keyword
+
 
 ***
 
