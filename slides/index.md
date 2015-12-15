@@ -7,7 +7,7 @@
 ***
 
 # Compiler is my frenemy
-Filip Å taffa
+Filip ©taffa
 
 ***
 
@@ -248,6 +248,9 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 	[lang=ruby]
 	priority_queue.enqueue(item); #throws
 
+	order = priority_queue.dequeue();
+	order.id //throws if object does not have property
+
 ---
 
 ### Less implicit conversion
@@ -296,7 +299,7 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 	[lang=ruby]
 	class SizeMatters
 		include Comparable
-		attr :str
+		attr_reader :str
 		def <=>(anOther)
 			str.size <=> anOther.str.size
 		end
@@ -315,7 +318,7 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 ### Calculate price
 
 	[lang=ruby]
-	def ChildOrder < Order
+	class ChildOrder < Order
 		def calculate_price
 			...
 		end
@@ -476,6 +479,20 @@ OO language
 
 ---
 
+### Wrappers around basic functionality
+
+* IO, network
+* complictes testing
+
+---
+
+
+### Intefaces limitation
+
+* can't add to existing types
+
+---
+
 ### Generics
 
 	[lang=java]
@@ -491,6 +508,16 @@ OO language
 	}
 
 	Order order = (Order)priorityQueue.dequeue();
+
+---
+
+### Null
+
+	[lang=java]
+	Order order = priorityQueue.dequeue();
+	order.Id; // throws 
+
+' does not happen that often, but is very painful and requires good documentation
 
 ---
 
@@ -515,15 +542,25 @@ OO language
 ---
 
 ### Other keywords
-* final, sealed
+* final (sealed in C#)
 * access modifiers
 * static methods
+
+### Types
+[lang=java]
+public X Method(X1 arg1, X2 arg2, ...) // compile check
+
+public T Method<T>(X arg, class clazz) // no compile check between T and clazz, will fail at runtime
+
+X x = ...
+x.Method(); //compile check
 
 ***
 
 ## C#
 * static, strongly typed, OO
 * running on .NET
+* runtime generics
 
 ---
 
@@ -555,10 +592,52 @@ OO language
 	var fun = (string x) => 5; // error
 	Func<int, int> = x => 5;
 
+***
+
+## Dynamic vs static OO languages
+
 ---
 
-### Generics
-* runtime
+### Gradual typing
+* allowing static types in parts of application
+* Typescript
+
+***
+
+### C# dynamic keyword
+
+	[lang=cs]
+	dynamic x = new Order();
+	dynamic id = Order.Id(); // runtime check
+	dynamic id = Order.id(); // fails
+
+---
+
+### Dependency injection container
+
+	[lang=cs]
+	var container = new Container();
+	container.Resolve<IOrderService>(); // throws, not registered
+
+' not really a problem, adding new dependency means that we plan to use it and almost always get this error
+
+---
+
+### Convention based DI
+
+	[lang=cs]
+	public class OrdersController < Controller
+	{
+		public ActionResult View(int id)
+			{}
+			...
+	}
+
+' ok in known frameworks, problematic when used in application without documentation
+
+---
+
+### What refactorings are safe?
 
 ***
 
@@ -583,6 +662,22 @@ OO language
 
 ---
 
+### Hindley-Milner type inference
+
+	[lang=fs]
+	let toUpper s =
+		s.ToUpper() //error, indeterminate lookup
+
+---
+
+### No implicit conversion
+
+	[lang=fs]
+	let parts = [|10L, 1L, 2L, 174L|]
+	let address = parts.[0] ||| (parts.[1] <<< 8) ||| (parts.[2] <<< 16) ||| (parts.[3] <<< 24)
+
+---
+
 ### Wrapping primitive types
 
 	[lang=fs]
@@ -595,29 +690,79 @@ OO language
 
 ---
 
-### Type providers
-
----
-
 ### Discriminated unions
 
+	[lang=fs]
+	type Order =
+	| Normal of OrderId * Customer * Item list
+	| Discounted of OrderId * Customer * Item list * Discount
+	| Child of ...
+
+	let calculatePrice = function
+		| Normal(_, _, items) -> ...
+		| Discounter(_, _, items, discount) ->	
 ---
+
+	    // compiler warning because match is incomplete
+
+---
+
+### Type providers
+
+	[lang=fs]
+	type OrderService = WsdlService<"http://address-to-service/Orders.asmx?WSDL">
+
+	let orderDto = OrderService.Orders. ...
+	OrderService.Orders.Save orderDto
+
 
 ***
 
 ## Haskell
+* strong, static, functional
+* pure, lazy, mostly academical
 
 ---
 
 ### Typeclasses
 
+	[lang=haskell]
+	class  Eq a  where
+		(==), (/=) :: a -> a -> Bool
+
+		x /= y     =  not (x == y)
+		x == y     =  not (x /= y)
+
+	instance Eq Order where
+		(Order id1, _, _) == (Order id2, _, _) = id1 = id2
+
 ---
 
-# Side effects in method signature
+### Typeclasses
+
+* can be defined along with type
+* can be added to existing types
+
+---
+
+### Side effects in method signature
+
+	[lang=haskell]
+	sum :: int -> int -> int
+	sum x y = x + y
+
+	sumAndShow :: int -> int -> IO int
+	sumAndShow x y = do
+		let total = x + y
+		putStrLn (show total)
+		total
 
 ***
 
 ## Idris
+* strong, static, functional
+* based on Haskell
+* not lazy, dependent types
 
 ---
 
@@ -625,11 +770,27 @@ OO language
 
 ---
 
-### Dependent types
+### First class types
+
+	[lang=idris]
+	printf : (s : String) -> FormatArgs (formatString s) -> String
 
 ---
 
-### Effects library
+### Dependent types
+
+	[lang=idris]
+	append : Vect n a -> Vect m a -> Vect (n + m) a
+	append Nil       ys = ys
+	append (x :: xs) ys = x :: append xs xs // compilation error, cant unify n + m with n + n
+
+---
+
+### Dependent types
+
+	[lang=idris]
+	append : Vect n a -> Vect m a -> Vect (n + m) a
+	append Nil       ys = ys
+	append (x :: xs) ys = x :: append xs ys
 
 ***
-
