@@ -1,13 +1,13 @@
 - title : Compiler is my frenemy
 - description : Compiler is my frenemy
-- author : Filip Štaffa
+- author : Filip Å taffa
 - theme : night
 - transition : default
 
 ***
 
 # Compiler is my frenemy
-Filip �taffa
+Filip Štaffa
 
 ***
 
@@ -515,7 +515,7 @@ OO language
 
 	[lang=java]
 	Order order = priorityQueue.dequeue();
-	order.Id; // throws 
+	order.getId; // throws 
 
 ' does not happen that often, but is very painful and requires good documentation
 
@@ -547,13 +547,14 @@ OO language
 * static methods
 
 ### Types
-[lang=java]
-public X Method(X1 arg1, X2 arg2, ...) // compile check
 
-public T Method<T>(X arg, class clazz) // no compile check between T and clazz, will fail at runtime
+	[lang=java]
+	public X Method(X1 arg1, X2 arg2, ...) // compile check
 
-X x = ...
-x.Method(); //compile check
+	public T Method<T>(X arg, class clazz) // no compile check between T and clazz, will fail at runtime
+
+	X x = ...
+	x.method(); //compile check
 
 ***
 
@@ -602,7 +603,30 @@ x.Method(); //compile check
 * allowing static types in parts of application
 * Typescript
 
-***
+---
+
+### Structural typing
+* Typescript
+* objects are same if they have same properties
+* interfaces are implemented implicitly
+
+---
+
+### Structural typing
+
+	[lang=typescript]
+	interface Order {
+		calculatePrice() : int;
+		}
+	class NormalOrder {
+		display() : void {}
+
+		calculatePrice() : number {
+			return 1;
+		};
+	}
+
+---
 
 ### C# dynamic keyword
 
@@ -701,8 +725,6 @@ x.Method(); //compile check
 	let calculatePrice = function
 		| Normal(_, _, items) -> ...
 		| Discounter(_, _, items, discount) ->	
----
-
 	    // compiler warning because match is incomplete
 
 ---
@@ -720,7 +742,7 @@ x.Method(); //compile check
 
 ## Haskell
 * strong, static, functional
-* pure, lazy, mostly academical
+* pure, lazy
 
 ---
 
@@ -740,6 +762,7 @@ x.Method(); //compile check
 
 ### Typeclasses
 
+* similar to interfaces
 * can be defined along with type
 * can be added to existing types
 
@@ -777,12 +800,23 @@ x.Method(); //compile check
 
 ---
 
+### Generics
+
+	[lang=cs]
+	public class PriorityQueue<T>
+
+* type parametrized by type
+
+---
+
 ### Dependent types
 
 	[lang=idris]
 	append : Vect n a -> Vect m a -> Vect (n + m) a
 	append Nil       ys = ys
 	append (x :: xs) ys = x :: append xs xs // compilation error, cant unify n + m with n + n
+
+* type paramatrized by any value
 
 ---
 
@@ -794,3 +828,5 @@ x.Method(); //compile check
 	append (x :: xs) ys = x :: append xs ys
 
 ***
+
+## Questions
