@@ -354,6 +354,16 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 
 ---
 
+### Data representation
+
+	[lang=clojure]
+	[1, 2, 3, 4, 5] ;; list
+	{ :type :normal, :person { :name "John", :surname "Doe"}}
+
+* can define custom types
+
+---
+
 ### Calculating price of order
 OO language
 
@@ -406,6 +416,9 @@ OO language
 
 ### Types
 
+	[lang=clojure]
+	(defn ? method [? arg1, ? arg2])
+
 
 ***
 
@@ -414,6 +427,15 @@ OO language
 * more static than clojure, weakly typed, functional
 * compiled
 * 'let it crash'
+
+---
+
+### Data representation
+
+	[language=erlang]
+	{ normal, 24, [ pizza, cola]} % tuple
+
+	-record(order, {type, person, contents, ...}). % record, compiler hack
 
 ---
 
@@ -489,6 +511,7 @@ OO language
 
 ### Intefaces limitation
 
+* explicit
 * can't add to existing types
 
 ---
@@ -702,6 +725,15 @@ OO language
 
 ---
 
+### Data representation
+
+	[lang=fs]
+	("normal", 24) // tuple (string, int)
+
+	type Order = { type : string; person : Person, contents : ...} // record
+
+---
+
 ### Wrapping primitive types
 
 	[lang=fs]
@@ -711,6 +743,13 @@ OO language
 
 	let order = loadOrder 1 //fails
 	let order = loadOrder OrderId(1) 
+
+---
+
+### Wrapping primitive types
+
+	[lang=fs]
+	(OrderId(1), Person(...)) // tuple (OrderId, Person)
 
 ---
 
@@ -828,5 +867,9 @@ OO language
 	append (x :: xs) ys = x :: append xs ys
 
 ***
+
+### Dynamic vs static functional languages comparison
+
+
 
 ## Questions
