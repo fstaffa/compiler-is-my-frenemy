@@ -1,6 +1,6 @@
 - title : Compiler is my frenemy
 - description : Compiler is my frenemy
-- author : Filip Å taffa
+- author : Filip Štaffa
 - theme : night
 - transition : default
 
@@ -16,7 +16,7 @@ Filip Štaffa
 ---
 
 ### Type
-> A type system is a tractable syntactit method for proving the absence of
+> A type system is a tractable syntactic method for proving the absence of
 > certain program behariors by classifying phrases according to the kinds of values they compute.
 
 ---
@@ -142,7 +142,7 @@ Filip Štaffa
 
 ### Duck typing
 
-When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.
+> When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.
 
 ---
 
@@ -191,38 +191,22 @@ When I see a bird that walks like a duck and swims like a duck and quacks like a
 
 ---
 
-
 ### Implicit conversion
 
 	[lang=js]
-	1 < undefined
-	undefined < 1
-
----
-
-### Implicit conversion
-
-	[lang=js]
-	1 < undefined = false
-	undefined < 1 = false
+	1 < undefined === false
+	undefined < 1 === false
 
 ---
 
 ### Crazy examples
 
 	[lang=js]
-	[] + []
-	[] + {}
-	{} + {}
-
----
-
-### Crazy examples
-
-	[lang=js]
-	[] + [] = ""
-	[] + {} = [object Object]
-	{} + {} = NaN
+	1 + {} === "1[object Object]"
+	{} + 1 === 1
+	[] + [] === ""
+	[] + {} === "[object Object]"
+	{} + {} // NaN
 
 Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 
@@ -323,12 +307,20 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 			...
 		end
 	end
+
+	price = order.calculate_price
 	
 ---
 
 ### Display order
+
+	[lang=ruby]
+	order.display(customer)
+	customer.display(order)
+	display.display(order, customer)
+
 * No built in mechanism
-* ? visitor
+* ? visitor pattern
 
 ---
 
@@ -357,7 +349,7 @@ Video [Wat](https://www.destroyallsoftware.com/talks/wat)
 ### Data representation
 
 	[lang=clojure]
-	[1, 2, 3, 4, 5] ;; list
+	[:normal, 10, ...] ;; vector
 	{ :type :normal, :person { :name "John", :surname "Doe"}}
 
 * can define custom types
@@ -387,7 +379,7 @@ OO language
 
 ---
 
-### Dynamic functional representation
+### Map representation
 
 	[lang=clojure]
 	{ :type :normal-order, :items [..], :customer { ...}, ...}
@@ -414,17 +406,19 @@ OO language
 		(expect [square (returns 16 (has-args [3]))]
 			(is (= 16 (square-of-sum 2 1))))
 
+---
+
 ### Types
 
 	[lang=clojure]
-	(defn ? method [? arg1, ? arg2])
+	(defn ? method [? arg1, ? arg2]) ;; runtime
 
 
 ***
 
 ## Erlang
 
-* more static than clojure, weakly typed, functional
+* more static than clojure, strongly typed, functional
 * compiled
 * 'let it crash'
 
@@ -447,7 +441,7 @@ OO language
 	calculate_price(#{type=child, items=items, ...}) ->
 		...
 
-	calculate_price() % throws
+	calculate_price() % does not compile
 	calculate_price(order, argument2) % throws
 
 ---
@@ -455,7 +449,7 @@ OO language
 ### Types
 
 	[lang=erlang]
-	? function(arg1, arg2, ...)
+	? function(? arg1, ? arg2, ...)
 
 	a.?
 
@@ -504,12 +498,12 @@ OO language
 ### Wrappers around basic functionality
 
 * IO, network
-* complictes testing
+* complicates testing
 
 ---
 
 
-### Intefaces limitation
+### Interfaces limitation
 
 * explicit
 * can't add to existing types
@@ -537,8 +531,9 @@ OO language
 ### Null
 
 	[lang=java]
+	priorityQueue.enqueue(null, priority);
 	Order order = priorityQueue.dequeue();
-	order.getId; // throws 
+	order.getId(); // error 
 
 ' does not happen that often, but is very painful and requires good documentation
 
@@ -569,12 +564,14 @@ OO language
 * access modifiers
 * static methods
 
+---
+
 ### Types
 
 	[lang=java]
-	public X Method(X1 arg1, X2 arg2, ...) // compile check
+	public X method(X1 arg1, X2 arg2, ...) // compile check
 
-	public T Method<T>(X arg, class clazz) // no compile check between T and clazz, will fail at runtime
+	public T deserialize<T>(X arg, Class clazz) // no compile check between T and clazz, will fail at runtime
 
 	X x = ...
 	x.method(); //compile check
@@ -591,7 +588,7 @@ OO language
 ### Implicit conversion
 
 	[lang=cs]
-	var bytes = new byte[] {10, 1, 2, 172};
+	var bytes = new byte[] { 10, 1, 2, 172 };
 	long ip = bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24;
 
 ---
@@ -599,7 +596,7 @@ OO language
 ### Implicit conversion
 
 	[lang=cs]
-	var bytes = new byte[] {10, 1, 2, 172};
+	var bytes = new byte[] { 10, 1, 2, 172 };
 	long ip = bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24;
 
 	byte << 8 // int
@@ -624,12 +621,12 @@ OO language
 
 ### Gradual typing
 * allowing static types in parts of application
-* Typescript
+* Typescript, Dialyzer, core.typed
 
 ---
 
 ### Structural typing
-* Typescript
+* Typescript, Go
 * objects are same if they have same properties
 * interfaces are implemented implicitly
 
@@ -648,6 +645,12 @@ OO language
 			return 1;
 		};
 	}
+
+---
+
+### IDE
+* can give hints and warnings based on heuristic, not logic
+* don't have to be precise
 
 ---
 
@@ -676,8 +679,10 @@ OO language
 	public class OrdersController < Controller
 	{
 		public ActionResult View(int id)
-			{}
+		{
 			...
+		}
+		...
 	}
 
 ' ok in known frameworks, problematic when used in application without documentation
@@ -703,7 +708,7 @@ OO language
 ### Hindley-Milner type inference
 
 	[lang=fs]
-	let incrementFirstAndMultiply x y =
+	let incrementFirstAndAdd x y =
 		let x1 = x + 1 // int
 		x1 + y // int
 
@@ -775,7 +780,6 @@ OO language
 
 	let orderDto = OrderService.Orders. ...
 	OrderService.Orders.Save orderDto
-
 
 ***
 
@@ -869,7 +873,96 @@ OO language
 ***
 
 ### Dynamic vs static functional languages comparison
+* static languages have better type checking
+* dynamic languages can use simple syntax instead of complex types
 
+---
 
+### Dynamic vs static functional languages comparison
+* set Order.Person.Address.City
+
+---
+
+### Clojure
+
+	[lang=clojure]
+	(assoc-in order [:person :address :city] "Praha")
+
+---
+
+### Haskell
+
+	[lang=haskell]
+	...
+
+[Lenses](https://www.fpcomplete.com/school/to-infinity-and-beyond/pick-of-the-week/a-little-lens-starter-tutorial)
+
+***
+
+## Summary
+
+---
+
+### Dynamic vs static typing
+* duck typing
+* monkey patching
+* structural typing
+* explicit interfaces
+* generics
+* dependent types
+
+---
+
+### Weak vs strong typing
+
+* implicit conversion
+
+---
+
+### Javascript
+
+	[lang=js]
+	1 + {} === "1[object Object]"
+	{} + 1 === 1
+	[] + [] === ""
+	[] + {} === "[object Object]"
+	{} + {} // NaN
+
+---
+
+### C#
+
+	[lang=cs]
+	long x = 1; //automatic cast
+	x + 1; //works
+	"string" + 1; // "string1"
+
+	long ip = bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24; // overflow
+
+---
+
+### F#
+
+	[lang=fs]
+	let x = 1L //int64
+	x + 1 //compilation error, int64 + int
+
+***
+
+## OO vs functional
+
+---
+
+### OO
+* single dispatch simple
+* dispatch on different argument complicated
+
+---
+
+### Functional
+* pattern matching based on value
+* discriminated unions
+
+---
 
 ## Questions
